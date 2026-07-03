@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reading Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Welcome, {{ session['operator'] }}</h2>
+        <a href="{{ url_for('logout') }}"><button style="background-color: #ff4d4d; color: white;">Logout</button></a>
+    </div>
+    
+    <hr>
+
+    <h3>Calculate Total Consumption</h3>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p style="color: orange;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Previous Reading:</label>
+        <input type="number" step="any" name="previous_reading" value="{{ prev if prev is not none else '' }}" required>
+        
+        <label>Current Reading:</label>
+        <input type="number" step="any" name="current_reading" value="{{ curr if curr is not none else '' }}" required>
+        
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if total is not none %}
+        <div style="margin-top: 20px; padding: 15px; background-color: #202b36; border-radius: 5px;">
+            <h4>Result:</h4>
+            <p><strong>Current Reading:</strong> {{ curr }}</p>
+            <p><strong>Previous Reading:</strong> {{ prev }}</p>
+            <hr style="border-color: #444;">
+            <p style="font-size: 1.2em; color: #00ff88;"><strong>Total Consumption:</strong> {{ total }}</p>
+        </div>
+    {% endif %}
+</body>
+</html>
